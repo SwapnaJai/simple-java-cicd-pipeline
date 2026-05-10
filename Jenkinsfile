@@ -2,49 +2,33 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'    // Make sure 'Maven3' is configured in Jenkins Global Tools
-        jdk 'JDK11'       // Also configure JDK11 in Jenkins
+        maven "MAVEN"
+        jdk "JDK"
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Cloning repository...'
-                git branch: 'master', url: 'https://github.com/SwapnaJai/simple-java-cicd-pipeline.git'
+        stage('Initialize'){
+            steps{
+                echo "PATH = ${M2_HOME}/bin:${PATH}"
+                echo "M2_HOME = /opt/maven"
             }
         }
-
         stage('Build') {
             steps {
-                echo 'Building project...'
-                sh 'mvn clean package'
+                dir("/var/lib/jenkins/workspace/New_demo_job/") {
+                sh 'mvn -B -DskipTests clean package'
+                }
+            
             }
         }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh 'mvn test'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying build...'
-                sh '''
-                mkdir -p /tmp/deploy
-                cp target/*.jar /tmp/deploy/
-                '''
-            }
-        }
-    }
-
+     }
     post {
-        success {
-            echo 'Build and deployment successful done!'
-        }
-        failure {
-            echo 'Build failed!'
-        }
-    }
+       always {
+          junit(
+        allowEmptyResults: true,
+        testResults: '*/test-reports/.xml'
+      )
+      }
+   } 
 }
+

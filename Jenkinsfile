@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'master', url: 'https://github.com/subhakishore/simple-java-ci-pipeline.git'
+                git branch: 'master', url: 'https://github.com/SwapnaJai/simple-java-cicd-pipeline.git'
             }
         }
 

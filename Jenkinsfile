@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                dir("/var/lib/jenkins/workspace/New_demo_job/") {
+                dir("sudo chown -R jenkins:jenkins/var/lib/jenkins/workspace/New_demo_job/") {
                 sh 'mvn -B -DskipTests clean package'
                 }
             
